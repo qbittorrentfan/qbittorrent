@@ -533,8 +533,8 @@ void SyncController::maindataAction()
 //   - rid (int): last response id
 void SyncController::torrentPeersAction()
 {
-    const auto id = BitTorrent::TorrentID::fromString(params()[u"hash"_qs]);
-    const BitTorrent::Torrent *torrent = BitTorrent::Session::instance()->getTorrent(id);
+    const auto infoHash = BitTorrent::InfoHash::fromString(params()[u"hash"_qs]);
+    const BitTorrent::Torrent *torrent = BitTorrent::Session::instance()->findTorrent(infoHash);
     if (!torrent)
         throw APIError(APIErrorType::NotFound);
 

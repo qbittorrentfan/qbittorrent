@@ -82,6 +82,8 @@ namespace BitTorrent
 
         operator WrappedType() const;
 
+        static InfoHash fromString(const QString &hashString);
+
     private:
         bool m_valid = false;
         WrappedType m_nativeHash;

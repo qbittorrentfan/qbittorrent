@@ -45,6 +45,24 @@ BitTorrent::InfoHash::InfoHash(const SHA1Hash &v1, const SHA256Hash &v2)
 }
 #endif
 
+BitTorrent::InfoHash BitTorrent::InfoHash::fromString(const QString &hashString) {
+#ifdef QBT_USES_LIBTORRENT2
+    if (hashString.length() == 64) {
+        auto digest = Digest32<256>::fromString(hashString);
+        auto sha256 = SHA256Hash(digest);
+        auto n = QString::fromLatin1("");
+        return InfoHash(SHA1Hash(Digest32<160>::fromString(n)), sha256);
+    } else {
+#endif
+        auto digest = Digest32<160>::fromString(hashString);
+        auto sha1 = SHA1Hash(digest);
+        auto n = QString::fromLatin1("");
+        return InfoHash(sha1, SHA256Hash(Digest32<256>::fromString(n)));
+#ifdef QBT_USES_LIBTORRENT2
+    }
+#endif
+}
+
 bool BitTorrent::InfoHash::isValid() const
 {
     return m_valid;
